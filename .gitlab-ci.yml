@@ -1,0 +1,36 @@
+stages:
+  - containerization
+  - deployment
+
+variables:
+  APPLICATION_NAME: real-time-polling-front
+  KUBERNETES_PORT: 30691
+
+  # Container image will be stored on Docker HUb
+  CONTAINER_IMAGE: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}
+
+containerization:
+  stage: containerization
+  tags:
+    - moreillon
+  script:
+    # Docker Hub login
+    - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
+    # Building the container image
+    - docker build -t ${CONTAINER_IMAGE} .
+    # Push the container image to the container registry
+    - docker push ${CONTAINER_IMAGE}
+
+deployment:
+  stage: deployment
+  tags:
+    - moreillon
+  script:
+    # create/update the deployment
+    - envsubst < kubernetes_manifest.yml | kubectl apply -f -
+    # Pull latest image of deployment
+    - kubectl rollout restart deployment/${APPLICATION_NAME}
+  environment:
+    name: production
+    kubernetes:
+      namespace: ${KUBERNETES_NAMESPACE}
