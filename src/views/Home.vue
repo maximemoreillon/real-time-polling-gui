@@ -44,11 +44,12 @@
 
       <v-sheet
         rounded
-        outlined>
+        outlined
+        color="grey lighten-4">
         <v-progress-linear
           height="30"
           background-color="red"
-          :buffer-value="percentage('NG')"
+          :buffer-value="percentage('NG') + percentage('OK')"
           :value="percentage('OK')"
           color="green"
           rounded />
