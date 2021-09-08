@@ -1,32 +1,40 @@
 <template>
-  <v-card>
+  <v-card max-width="600px" class="mx-auto mt-5">
     <v-toolbar
       flat
       class="text-center">
 
       <v-btn
-        text
         color="green"
+        class="mr-2"
+        dark
         @click="update_state('OK')">
-        OK
-      </v-btn>
-
-
-
-      <v-btn
-        text
-        color="red"
-        @click="update_state('NG')">
-        NG
+        <v-icon>mdi-thumb-up</v-icon>
+        <span>OK</span>
       </v-btn>
 
       <v-btn
-        text
+
+        class="mr-2"
         @click="update_state(null)">
-        Reset
+        <v-icon>mdi-close</v-icon>
+        <span>Reset</span>
+      </v-btn>
+
+
+
+      <v-btn
+        color="red"
+        class="mr-2"
+        dark
+        @click="update_state('NG')">
+        <v-icon>mdi-thumb-down</v-icon>
+        <span>NG</span>
+
       </v-btn>
 
       <v-spacer></v-spacer>
+
 
 
 
@@ -47,32 +55,37 @@
         outlined
         color="grey lighten-4">
         <v-progress-linear
-          height="30"
-          background-color="red"
-          :buffer-value="percentage('NG') + percentage('OK')"
-          :value="percentage('OK')"
-          color="green"
-          rounded />
+          height="50"
+          background-color="red lighten-3"
+          :buffer-value="100*(count('NG') + count('OK'))/users.length"
+          :value="100*count('OK')/users.length"
+          color="green lighten-3"
+          rounded>
+          OK: {{ count('OK') }}, NG: {{ count('NG') }}, Total: {{users.length}}
+        </v-progress-linear>
       </v-sheet>
-
-
-
-      <v-list
-        dense
-        rounded>
-        <v-subheader>Members</v-subheader>
-        <v-list-item
-            v-for="(user, index) in users"
-            :key="index"
-            :class="{red: user.state === 'NG', green: user.state === 'OK',}">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{user.properties.display_name}} ({{user.properties.name_romaji}})
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
     </v-card-text>
+
+    <v-card-subtitle>Members: {{users.length}}</v-card-subtitle>
+    <v-card-text>
+      <v-card
+        class="my-3 lighten-3"
+        flat
+        outlined
+        v-for="(user, index) in sorted_users"
+        :key="index"
+        :class="{red: user.state === 'NG', green: user.state === 'OK',}">
+
+        <v-card-text class="text--primary">{{user.properties.display_name}} ({{user.properties.name_romaji}})</v-card-text>
+
+      </v-card>
+    </v-card-text>
+
+
+
+
+
+
 
 
   </v-card>
@@ -114,14 +127,17 @@
         .then( () => { })
         .catch(console.error)
       },
-      percentage(state){
-        return 100 * this.users.filter(u => u.state === state).length / this.users.length
+      count(state){
+        return this.users.filter(u => u.state === state).length
       }
     },
     computed: {
       current_user(){
         return this.$store.state.current_user
       },
+      sorted_users(){
+        return this.users.slice().sort((a,b) => a.state - b.state)
+      }
     },
 
 
