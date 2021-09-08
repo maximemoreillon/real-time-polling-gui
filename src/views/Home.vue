@@ -67,19 +67,24 @@
     </v-card-text>
 
     <v-card-subtitle>Members: {{users.length}}</v-card-subtitle>
+
+
     <v-card-text>
+      <transition-group name="list" tag="div">
       <v-card
         class="my-3 lighten-3"
         flat
         outlined
-        v-for="(user, index) in sorted_users"
-        :key="index"
+        v-for="(user) in sorted_users"
+        :key="user.identity"
         :class="{red: user.state === 'NG', green: user.state === 'OK',}">
 
         <v-card-text class="text--primary">{{user.properties.display_name}} ({{user.properties.name_romaji}})</v-card-text>
 
       </v-card>
+      </transition-group>
     </v-card-text>
+
 
 
 
@@ -99,7 +104,12 @@
 
     },
     data: () => ({
-      users: []
+      users: [
+        // {identity: '1', state:'OK', properties: {display_name: '1'}},
+        // {identity: '2', state:'OK', properties: {display_name: '2'}},
+        // {identity: '3', state:'OK', properties: {display_name: '3'}},
+        // {identity: '4', state: null, properties: {display_name: '4'}},
+      ]
     }),
     mounted(){
       this.get_users()
@@ -136,7 +146,14 @@
         return this.$store.state.current_user
       },
       sorted_users(){
-        return this.users.slice().sort((a,b) => a.state - b.state)
+        //return []
+        return this.users.slice().sort((a,b) => {
+          if(!a.state && b.state) return 1
+          else if(a.state && !b.state) return -1
+          else if(a.state < b.state) return -1
+          else if(a.state > b.state) return 1
+          return 0
+        })
       }
     },
 
@@ -162,3 +179,9 @@
 
   }
 </script>
+
+<style scoped>
+.list-move {
+  transition: transform 0.25s;
+}
+</style>
