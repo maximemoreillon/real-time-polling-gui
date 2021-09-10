@@ -8,12 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@moreillon/vue_application_template_vuetify": "^0.3.6",
-    "axios": "^0.21.1",
-    "core-js": "^3.6.5",
+    "@moreillon/vue_application_template_vuetify": "^1.0.0",
+    "axios": "^0.21.4",
+    "core-js": "^3.17.3",
     "socket.io-client": "^4.2.0",
     "vue": "^2.6.11",
-    "vue-axios": "^3.2.5",
+    "vue-axios": "^3.3.6",
     "vue-router": "^3.2.0",
     "vue-socket.io": "^3.0.10",
     "vuetify": "^2.4.0",

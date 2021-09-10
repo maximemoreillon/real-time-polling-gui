@@ -104,12 +104,7 @@
 
     },
     data: () => ({
-      users: [
-        // {identity: '1', state:'OK', properties: {display_name: '1'}},
-        // {identity: '2', state:'OK', properties: {display_name: '2'}},
-        // {identity: '3', state:'OK', properties: {display_name: '3'}},
-        // {identity: '4', state: null, properties: {display_name: '4'}},
-      ]
+      users: [ ]
     }),
     mounted(){
       this.get_users()
