@@ -52,10 +52,10 @@ export default {
   }),
   sockets: {
     connect () {
-      console.log('[WS] connected')
+      //console.log('[WS] connected')
     },
     disconnect() {
-      console.log('[WS] disconnected')
+      //console.log('[WS] disconnected')
     }
 
   },

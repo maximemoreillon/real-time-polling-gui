@@ -75,8 +75,8 @@
         class="my-3 lighten-3"
         flat
         outlined
-        v-for="(user, user_index) in sorted_users"
-        :key="`user_${user_index}`"
+        v-for="(user) in sorted_users"
+        :key="`user_${user.socket.id}`"
         :class="{red: user.state === 'NG', green: user.state === 'OK',}">
 
         <v-card-text class="text--primary">
@@ -119,10 +119,11 @@
         .catch(console.error)
       },
       update_state(state){
-        const url = `${process.env.VUE_APP_API_URL}/users/${this.current_user.identity}`
-        this.axios.patch(url,{state})
-        .then( () => { })
-        .catch(console.error)
+        // const url = `${process.env.VUE_APP_API_URL}/users/${this.current_user.identity}`
+        // this.axios.patch(url,{state})
+        // .then( () => { })
+        // .catch(console.error)
+        this.$socket.emit('user_state', {state})
       },
       update_all_states(state){
         if(this.$store.state.locked) {
@@ -158,17 +159,20 @@
 
     sockets: {
       user_connected (user) {
-        this.users.push(user)
+        const found_index = this.users.findIndex(u => u.socket.id === user.socket.id)
+        if(found_index === -1) this.users.push(user)
+        else this.$set(this.users,found_index,user)
       },
       user_disconnected (user) {
-        const found_index = this.users.findIndex(u => u.identity === user.identity)
+        const found_index = this.users.findIndex(u => u.socket.id === user.socket.id)
         if(found_index > -1) this.users.splice(found_index,1)
       },
       user_updated(user){
-        const found_index = this.users.findIndex(u => u.identity === user.identity)
+        const found_index = this.users.findIndex(u => u.socket.id === user.socket.id)
         if(found_index > -1) this.$set(this.users,found_index,user)
       },
       all_users_updated(users){
+        //console.log(users)
         this.users = users
       }
     },
