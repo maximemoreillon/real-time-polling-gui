@@ -172,7 +172,6 @@
         if(found_index > -1) this.$set(this.users,found_index,user)
       },
       all_users_updated(users){
-        //console.log(users)
         this.users = users
       }
     },

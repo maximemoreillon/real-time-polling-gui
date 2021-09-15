@@ -3,7 +3,7 @@
     :options="options"
     @user="get_user($event)">
 
-    <!-- <template v-slot:nav>
+    <template v-slot:nav>
       <v-list
         dense
         nav >
@@ -12,6 +12,7 @@
           :key="`nav_item_${index}`"
           :to="item.to"
           exact>
+
           <v-list-item-icon>
             <v-icon>{{item.icon}}</v-icon>
           </v-list-item-icon>
@@ -21,7 +22,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </template> -->
+    </template>
 
   </AppTemplate>
 </template>
@@ -46,7 +47,7 @@ export default {
       identification_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/v2/whoami`,
     },
     nav: [
-      {title: 'Home', to: {name: 'Home'}, icon: 'mdi-home'},
+      {title: 'Poll', to: {name: 'Home'}, icon: 'mdi-poll'},
       {title: 'About', to: {name: 'About'}, icon: 'mdi-information-outline'},
     ]
   }),
