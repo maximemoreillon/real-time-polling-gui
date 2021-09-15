@@ -75,11 +75,13 @@
         class="my-3 lighten-3"
         flat
         outlined
-        v-for="(user) in sorted_users"
-        :key="user.identity"
+        v-for="(user, user_index) in sorted_users"
+        :key="`user_${user_index}`"
         :class="{red: user.state === 'NG', green: user.state === 'OK',}">
 
-        <v-card-text class="text--primary">{{user.properties.display_name}} ({{user.properties.name_romaji}})</v-card-text>
+        <v-card-text class="text--primary">
+          {{user.properties.display_name}} ({{user.properties.name_romaji}})
+        </v-card-text>
 
       </v-card>
       </transition-group>
@@ -124,7 +126,7 @@
       },
       update_all_states(state){
         if(this.$store.state.locked) {
-          if(prompt('Password') !== 'poketenashi') return alert('Access denied')
+          if(prompt('Administrator password') !== 'poketenashi') return alert('Access denied')
           this.$store.commit('unlock')
         }
         const url = `${process.env.VUE_APP_API_URL}/users/`

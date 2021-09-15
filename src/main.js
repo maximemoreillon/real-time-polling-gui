@@ -14,10 +14,11 @@ const socketio_options = {
   auth: {
     token: localStorage.jwt
   },
+  autoConnect: false,
 }
 
 Vue.use(new VueSocketIO({
-    connection: io(`${process.env.VUE_APP_API_URL}`, socketio_options), 
+    connection: io(`${process.env.VUE_APP_API_URL}`, socketio_options),
   })
 )
 

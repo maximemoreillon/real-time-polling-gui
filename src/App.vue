@@ -52,8 +52,10 @@ export default {
   }),
   sockets: {
     connect () {
+      console.log('[WS] connected')
     },
     disconnect() {
+      console.log('[WS] disconnected')
     }
 
   },
@@ -61,10 +63,12 @@ export default {
   methods: {
     get_user(user){
       this.$store.commit('set_current_user', user)
-      if(!user) return
-      this.$socket.disconnect()
-      this.$socket.auth = {token: localStorage.jwt}
-      this.$socket.connect()
+      if(!user) this.$socket.disconnect()
+      else {
+        this.$socket.auth = {token: localStorage.jwt}
+        this.$socket.connect()
+      }
+
     }
   }
 };
