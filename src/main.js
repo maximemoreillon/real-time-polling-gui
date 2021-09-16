@@ -8,6 +8,9 @@ import VueSocketIO from 'vue-socket.io'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+var VueCookie = require('vue-cookie')
+Vue.use(VueCookie)
+
 Vue.use(VueAxios, axios)
 
 const socketio_options = {
