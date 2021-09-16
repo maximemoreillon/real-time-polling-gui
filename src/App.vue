@@ -47,16 +47,14 @@ export default {
       identification_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/v2/whoami`,
     },
     nav: [
-      {title: 'Poll', to: {name: 'Home'}, icon: 'mdi-poll'},
-      {title: 'About', to: {name: 'About'}, icon: 'mdi-information-outline'},
+      {title: 'Home', to: {name: 'home'}, icon: 'mdi-home'},
+      {title: 'About', to: {name: 'about'}, icon: 'mdi-information-outline'},
     ]
   }),
   sockets: {
     connect () {
-      console.log('[WS] connected')
     },
     disconnect() {
-      console.log('[WS] disconnected')
     }
 
   },
