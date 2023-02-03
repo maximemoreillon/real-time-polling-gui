@@ -1,32 +1,28 @@
 stages:
-  - containerization
-  - deployment
+  - build
 
 variables:
-  APPLICATION_NAME: real-time-polling-front
-  KUBERNETES_PORT: 30691
-
-  # Container image will be stored on Docker HUb
+  APPLICATION_NAME: real-time-polling-gui
   CONTAINER_IMAGE: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}
+  CONTAINER_IMAGE_TAGGED: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}:${CI_COMMIT_SHORT_SHA}
 
-containerization:
-  stage: containerization
-  script:
-    # Docker Hub login
+image: moreillon/ci-dind
+services:
+  - name: docker:19.03.12-dind
+
+build:
+  only:
+    - master
+  stage: build
+  tags:
+    - dind
+  before_script:
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
-    # Building the container image
-    - docker build -t ${CONTAINER_IMAGE} .
-    # Push the container image to the container registry
-    - docker push ${CONTAINER_IMAGE}
-
-deployment:
-  stage: deployment
   script:
-    # create/update the deployment
-    - envsubst < kubernetes_manifest.yml | kubectl apply -f -
-    # Pull latest image of deployment
-    - kubectl rollout restart deployment/${APPLICATION_NAME}
-  environment:
-    name: production
-    kubernetes:
-      namespace: ${KUBERNETES_NAMESPACE}
+    # Building
+    - docker build -t ${CONTAINER_IMAGE} .
+    # Tagging
+    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_TAGGED}
+    # Pushing
+    - docker push ${CONTAINER_IMAGE}
+    - docker push ${CONTAINER_IMAGE_TAGGED}
